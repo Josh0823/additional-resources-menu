@@ -585,6 +585,7 @@ class TestAdditionalResourcesMenu():
         """Starting with no default links, add a link and verify that it appears in the submenu"""
         try:
             print('*'*80)
+            print('{} {}'.format(self.overrides_copy_path, os.path.exists(self.overrides_copy_path)))
             self.add_link(**self.test_link)
             print('after add_link() {}'.format(self.user_settings))
             self.reload_page()
