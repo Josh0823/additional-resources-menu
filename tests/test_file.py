@@ -582,6 +582,7 @@ class TestAdditionalResourcesMenu():
             self.add_link(**self.test_link)
             print(self.user_settings)
             self.reload_page()
+            print(self.user_settings)
             assert self.find_menu_link_element(self.test_link)
         except Exception:
             self.driver.save_screenshot('Exception_add_link.png')
