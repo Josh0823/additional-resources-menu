@@ -6,6 +6,8 @@ import sys
 import time
 from copy import deepcopy
 
+import json5
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions
@@ -48,6 +50,11 @@ class TestAdditionalResourcesMenu():
         self.test_link = {'name': 'wikipedia', 'url': 'https://wikipedia.org'}
 
         test_file_path = os.path.abspath(__file__)
+        self.user_settings_path = os.path.abspath(
+            os.path.join(
+                os.path.expandvars('$HOME'),
+                '.jupyter/lab/user-settings/additional-resources-menu/plugin.jupyterlab-settings'))
+        self.user_settings = self.read_user_settings_file()
         self.example_overrides = os.path.abspath(
             os.path.join(test_file_path, '../../example_overrides.json'))
         self.overrides_copy_path = os.path.abspath(
@@ -78,6 +85,11 @@ class TestAdditionalResourcesMenu():
             except Exception:
                 pass
 
+    def read_user_settings_file(self):
+        with open(self.user_settings_path, 'r') as f:
+            user_settings = json5.load(f)
+        return user_settings
+
     def add_overrides_file(self):
         os.makedirs(self.overrides_copy_path, exist_ok=True)
         dest = os.path.abspath(os.path.join(self.overrides_copy_path, 'default_setting_overrides.json'))
@@ -85,7 +97,7 @@ class TestAdditionalResourcesMenu():
         self._defaults = self._override_defaults
         if self.default_settings:
             self.current_settings = deepcopy(self._override_defaults)
-        time.sleep(5)
+        time.sleep(1)
 
     def remove_overrides_file(self):
         if os.path.exists(self.overrides_copy_path):
@@ -93,7 +105,7 @@ class TestAdditionalResourcesMenu():
         self._defaults = self._settings_defaults
         if self.default_settings:
             self.current_settings = deepcopy(self._settings_defaults)
-        time.sleep(5)
+        time.sleep(1)
 
     def reset_settings(self):
         self.open_settings_editor()
@@ -130,6 +142,7 @@ class TestAdditionalResourcesMenu():
             return False
 
     def open_settings_editor(self):
+        self.user_settings = self.read_user_settings_file()
         if self.is_settings_editor_plugin_visible():
             return
         wait = WebDriverWait(self.driver, 10)
@@ -158,8 +171,13 @@ class TestAdditionalResourcesMenu():
             expected_conditions.visibility_of_element_located(
                 (By.CSS_SELECTOR, r'#jp-SettingsEditor-additional-resources-menu\:plugin')))
 
-    def close_settings_editor(self):
-        time.sleep(10)
+    def close_settings_editor(self, skip_wait=False):
+        if not self.default_settings and not skip_wait:
+            last_user_settings = self.read_user_settings_file()
+            while self.user_settings == last_user_settings:
+                time.sleep(1)
+                last_user_settings = self.read_user_settings_file()
+            self.user_settings = last_user_settings
         elem = self.driver.find_element(
             By.XPATH,
             '//div[@class="lm-TabBar-tabLabel" and text()="Settings"]/following-sibling::div')
@@ -366,7 +384,7 @@ class TestAdditionalResourcesMenu():
             self.open_in_jupyter_checkbox_css
             )
         out = checkbox.is_selected()
-        self.close_settings_editor()
+        self.close_settings_editor(skip_wait=True)
         return out
 
     def set_open_in_jupyter(self, checked=False):
@@ -401,7 +419,7 @@ class TestAdditionalResourcesMenu():
             'jp-SettingsEditor-additional-resources-menu:plugin_rank'
             )
         last_rank = int(rank_input.get_attribute('value'))
-        self.close_settings_editor()
+        self.close_settings_editor(skip_wait=True)
         return last_rank
 
     def set_rank(self, value=100):
@@ -452,8 +470,6 @@ class TestAdditionalResourcesMenu():
             expected_conditions.visibility_of_element_located((By.ID, 'jp-mainmenu-help')))
         help_menu_labels = overlay.find_elements(By.CSS_SELECTOR, '.lm-Menu-itemLabel')
         for x in help_menu_labels:
-            print("{} {}".format(
-                x.text, self.current_settings['additional-resources-menu:plugin']['menu-title']))
             if x.text == self.current_settings['additional-resources-menu:plugin']['menu-title']:
                 ar_menu = x
                 break
@@ -801,9 +817,6 @@ class TestAdditionalResourcesMenu():
             overrides_title = self._override_defaults['additional-resources-menu:plugin']['menu-title']
             title = 'Menu Title Test'
             labels = self.get_menu_labels()
-            print(default_title)
-            print(overrides_title)
-            print(labels)
             assert default_title in labels
             assert overrides_title not in labels
             assert title not in labels
