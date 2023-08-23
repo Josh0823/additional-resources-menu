@@ -100,6 +100,7 @@ class TestAdditionalResourcesMenu():
         self._defaults = self._override_defaults
         if self.default_settings:
             self.current_settings = deepcopy(self._override_defaults)
+        self.user_settings = self.read_user_settings_file()
         time.sleep(1)
 
     def remove_overrides_file(self):
@@ -108,6 +109,7 @@ class TestAdditionalResourcesMenu():
         self._defaults = self._settings_defaults
         if self.default_settings:
             self.current_settings = deepcopy(self._settings_defaults)
+        self.user_settings = self.read_user_settings_file()
         time.sleep(1)
 
     def reset_settings(self):
