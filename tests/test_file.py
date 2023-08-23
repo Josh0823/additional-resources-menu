@@ -91,7 +91,6 @@ class TestAdditionalResourcesMenu():
                 user_settings = json5.load(f)
         except FileNotFoundError:
             user_settings = {}
-        print(user_settings)
         return user_settings
 
     def add_overrides_file(self):
@@ -581,6 +580,7 @@ class TestAdditionalResourcesMenu():
         """Starting with no default links, add a link and verify that it appears in the submenu"""
         try:
             self.add_link(**self.test_link)
+            print(self.user_settings)
             self.reload_page()
             assert self.find_menu_link_element(self.test_link)
         except Exception:
