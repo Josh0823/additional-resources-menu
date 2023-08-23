@@ -47,10 +47,9 @@ jobs:
         run: sudo chmod a+x /usr/bin/geckodriver
 
       # Create the overrides.json file and copy the data from example_overrides
-      - name: Copy overrides
+      - name: Setup overrides path
         run: |
           mkdir -p /home/runner/.local/etc/jupyter/labconfig
-          cp example_overrides.json /home/runner/.local/etc/jupyter/labconfig/default_setting_overrides.json
 
       # Install selenium and pytest
       - name: Install Selenium
