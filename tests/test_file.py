@@ -91,6 +91,7 @@ class TestAdditionalResourcesMenu():
                 user_settings = json5.load(f)
         except FileNotFoundError:
             user_settings = {}
+        print(user_settings)
         return user_settings
 
     def add_overrides_file(self):
