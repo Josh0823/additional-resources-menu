@@ -500,6 +500,7 @@ class TestAdditionalResourcesMenu():
         return link_labels
 
     def find_menu_link_element(self, el):
+        print('find_menu_link_elemnt({})'.format(el))
         self.open_submenu()
         wait = WebDriverWait(self.driver, 10)
         # Make sure name option is present, return it
@@ -589,8 +590,8 @@ class TestAdditionalResourcesMenu():
             self.reload_page()
             print('after reload_page() {}'.format(self.user_settings))
             print('after reload_page() {}'.format(self.current_settings['additional-resources-menu:plugin']))
-            print('*'*80)
             assert self.find_menu_link_element(self.test_link)
+            print('*'*80)
         except Exception:
             self.driver.save_screenshot('Exception_add_link.png')
             raise
