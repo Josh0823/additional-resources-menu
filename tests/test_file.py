@@ -473,8 +473,10 @@ class TestAdditionalResourcesMenu():
             expected_conditions.visibility_of_element_located((By.ID, 'jp-mainmenu-help')))
         help_menu_labels = overlay.find_elements(By.CSS_SELECTOR, '.lm-Menu-itemLabel')
         for x in help_menu_labels:
-            print('{} {}'.format(
-                x.text, self.current_settings['additional-resources-menu:plugin']['menu-title']))
+            print('help menu label: {}, settings menu_title: {}, user_settings menu_title: {}'.format(
+                x.text,
+                self.current_settings['additional-resources-menu:plugin']['menu-title'],
+                self.user_settings['menu-title']))
             if x.text == self.current_settings['additional-resources-menu:plugin']['menu-title']:
                 ar_menu = x
                 break
@@ -581,11 +583,13 @@ class TestAdditionalResourcesMenu():
     def test_settings_add_link(self):
         """Starting with no default links, add a link and verify that it appears in the submenu"""
         try:
+            print('*'*80)
             self.add_link(**self.test_link)
-            print(self.user_settings)
+            print('after add_link() {}'.format(self.user_settings))
             self.reload_page()
-            print(self.user_settings)
-            print(self.current_settings['additional-resources-menu:plugin'])
+            print('after reload_page() {}'.format(self.user_settings))
+            print('after reload_page() {}'.format(self.current_settings['additional-resources-menu:plugin']))
+            print('*'*80)
             assert self.find_menu_link_element(self.test_link)
         except Exception:
             self.driver.save_screenshot('Exception_add_link.png')
