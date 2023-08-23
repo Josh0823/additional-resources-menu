@@ -86,8 +86,11 @@ class TestAdditionalResourcesMenu():
                 pass
 
     def read_user_settings_file(self):
-        with open(self.user_settings_path, 'r') as f:
-            user_settings = json5.load(f)
+        try:
+            with open(self.user_settings_path, 'r') as f:
+                user_settings = json5.load(f)
+        except FileNotFoundError:
+            user_settings = {}
         return user_settings
 
     def add_overrides_file(self):
