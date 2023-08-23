@@ -478,7 +478,7 @@ class TestAdditionalResourcesMenu():
             print('help menu label: {}, settings menu_title: {}, user_settings menu_title: {}'.format(
                 x.text,
                 self.current_settings['additional-resources-menu:plugin']['menu-title'],
-                self.user_settings['menu-title']))
+                self.user_settings))
             if x.text == self.current_settings['additional-resources-menu:plugin']['menu-title']:
                 ar_menu = x
                 break
