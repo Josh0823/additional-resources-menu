@@ -64,6 +64,3 @@ jobs:
           jupyter lab --port=8888 --NotebookApp.token='' --debug &
       - name: Run tests
         run: pytest -s -p no:logging
-      - name: Debug
-        uses: stateful/vscode-server-action@v1
-        if: failure()
