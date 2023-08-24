@@ -475,10 +475,10 @@ class TestAdditionalResourcesMenu():
             expected_conditions.visibility_of_element_located((By.ID, 'jp-mainmenu-help')))
         help_menu_labels = overlay.find_elements(By.CSS_SELECTOR, '.lm-Menu-itemLabel')
         for x in help_menu_labels:
-            print('help menu label: {}, settings menu_title: {}, user_settings menu_title: {}'.format(
-                x.text,
-                self.current_settings['additional-resources-menu:plugin']['menu-title'],
-                self.user_settings))
+            #print('help menu label: {}, settings menu_title: {}, user_settings menu_title: {}'.format(
+            #    x.text,
+            #    self.current_settings['additional-resources-menu:plugin']['menu-title'],
+            #    self.user_settings))
             if x.text == self.current_settings['additional-resources-menu:plugin']['menu-title']:
                 ar_menu = x
                 break
@@ -502,7 +502,7 @@ class TestAdditionalResourcesMenu():
         return link_labels
 
     def find_menu_link_element(self, el):
-        print('find_menu_link_elemnt({})'.format(el))
+        #print('find_menu_link_elemnt({})'.format(el))
         self.open_submenu()
         wait = WebDriverWait(self.driver, 10)
         # Make sure name option is present, return it
@@ -586,15 +586,15 @@ class TestAdditionalResourcesMenu():
     def test_settings_add_link(self):
         """Starting with no default links, add a link and verify that it appears in the submenu"""
         try:
-            print('*'*80)
-            print('{} {}'.format(self.overrides_copy_path, os.path.exists(self.overrides_copy_path)))
+            #print('*'*80)
+            #print('{} {}'.format(self.overrides_copy_path, os.path.exists(self.overrides_copy_path)))
             self.add_link(**self.test_link)
-            print('after add_link() {}'.format(self.user_settings))
+            #print('after add_link() {}'.format(self.user_settings))
             self.reload_page()
-            print('after reload_page() {}'.format(self.user_settings))
-            print('after reload_page() {}'.format(self.current_settings['additional-resources-menu:plugin']))
+            #print('after reload_page() {}'.format(self.user_settings))
+            #print('after reload_page() {}'.format(self.current_settings['additional-resources-menu:plugin']))
             assert self.find_menu_link_element(self.test_link)
-            print('*'*80)
+            #print('*'*80)
         except Exception:
             self.driver.save_screenshot('Exception_add_link.png')
             raise
